@@ -1,0 +1,1189 @@
+:root {
+  --gryffindor-red: #740001;
+  --gryffindor-gold: #d3a625;
+  --slytherin-green: #1a472a;
+  --slytherin-silver: #5d5d5d;
+  --ravenclaw-blue: #0e1a40;
+  --ravenclaw-bronze: #946b2d;
+  --hufflepuff-yellow: #ffdb00;
+  --hufflepuff-black: #000000;
+  --dark-bg: #0a0e1a;
+  --card-bg: rgba(26, 34, 56, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --parchment: #F5E8C7;
+  --parchment-dark: #E6D3A7;
+  --ink: #2C1810;
+  --magic-glow: rgba(255, 215, 0, 0.7);
+  --darker-bg: #070711;
+  --spell-blue: #4A6FA5;
+  --spell-purple: #7E4A9B;
+  --magic-shadow: 0 0 15px var(--magic-glow);
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  --hover-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, #0a0e1a 0%, #1a1f3a 50%, #0f1629 100%);
+  color: #ffffff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23FFD700" d="M12 2L9 12l10 2-7 7 2-10 2 10-7-7 10-2z"/></svg>'), auto;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(116, 0, 1, 0.15) 0%, transparent 30%),
+    radial-gradient(circle at 90% 80%, rgba(26, 71, 42, 0.15) 0%, transparent 30%),
+    radial-gradient(circle at 50% 50%, rgba(14, 26, 64, 0.1) 0%, transparent 50%),
+    url('https://www.transparenttextures.com/patterns/old-map.png');
+  background-size: cover;
+  opacity: 0.08;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-sparkle {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 215, 0, 0.8);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  animation: sparkle 1.5s infinite alternate;
+}
+
+@keyframes sparkle {
+  0% { opacity: 0.3; transform: scale(0.8); }
+  100% { opacity: 1; transform: scale(1.2); }
+}
+
+.wand-trail {
+  position: absolute;
+  width: 2px;
+  height: 30px;
+  background: linear-gradient(to bottom, transparent, var(--gryffindor-gold), transparent);
+  pointer-events: none;
+  z-index: 9998;
+  animation: trailFade 1s forwards;
+}
+
+@keyframes trailFade {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(50px); }
+}
+
+.content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+.magical-header {
+  background: linear-gradient(135deg, rgba(14, 26, 64, 0.95) 0%, rgba(10, 14, 26, 0.95) 100%);
+  padding: 3rem 0;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, transparent, var(--gryffindor-gold), transparent) 1;
+  position: relative;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.magical-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://www.transparenttextures.com/patterns/dark-wood.png');
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.magical-header::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, 
+    transparent, 
+    var(--gryffindor-gold) 20%, 
+    var(--gryffindor-gold) 80%, 
+    transparent
+  );
+  opacity: 0.6;
+}
+
+.magic-wand-line {
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  width: 30%;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--gryffindor-gold), transparent);
+  transform: translateY(-50%);
+  animation: wandGlow 3s infinite alternate;
+  z-index: 1;
+}
+
+.magic-wand-line.reverse {
+  left: auto;
+  right: 10%;
+  animation-delay: 1.5s;
+}
+
+@keyframes wandGlow {
+  0% { opacity: 0.3; box-shadow: 0 0 5px var(--gryffindor-gold); }
+  100% { opacity: 1; box-shadow: 0 0 15px var(--gryffindor-gold); }
+}
+
+.header-sparkle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--gryffindor-gold);
+  border-radius: 50%;
+  animation: floatSparkle 4s infinite ease-in-out;
+  z-index: 2;
+}
+
+.sparkle-1 { top: 30%; left: 15%; animation-delay: 0s; }
+.sparkle-2 { top: 60%; left: 80%; animation-delay: 1s; }
+.sparkle-3 { top: 20%; left: 70%; animation-delay: 2s; }
+
+@keyframes floatSparkle {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+  50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+}
+
+.title-text {
+  font-family: 'Cinzel', serif;
+  font-weight: 900;
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  background: linear-gradient(135deg, var(--gryffindor-gold) 0%, #f4d03f 50%, var(--gryffindor-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.75rem;
+  letter-spacing: 2px;
+  text-shadow: 0 0 30px rgba(211, 166, 37, 0.3);
+  animation: shimmer 3s ease-in-out infinite;
+  position: relative;
+  z-index: 3;
+}
+
+.title-main {
+  display: block;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.title-sub {
+  display: block;
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+  font-weight: 400;
+  margin-top: 0.5rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+@keyframes shimmer {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+.parchment-controls {
+  background: linear-gradient(to bottom, var(--parchment) 0%, var(--parchment-dark) 100%);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 3rem;
+  border: 2px solid var(--gryffindor-gold);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.parchment-controls::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.magical-input-group {
+  background: rgba(42, 54, 85, 0.8) !important;
+  border: 2px solid var(--gryffindor-gold) !important;
+  color: var(--gryffindor-gold) !important;
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  font-family: 'Cinzel', serif;
+}
+
+.magical-input {
+  background: rgba(42, 54, 85, 0.8) !important;
+  border: 2px solid var(--gryffindor-gold) !important;
+  color: white !important;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.magical-input:focus {
+  box-shadow: 0 0 10px var(--magic-glow) !important;
+  border-color: var(--gryffindor-gold) !important;
+  background: rgba(42, 54, 85, 0.9) !important;
+}
+
+.magical-clear-btn {
+  background: rgba(116, 0, 1, 0.8);
+  border: 2px solid var(--gryffindor-gold);
+  border-left: none;
+  border-radius: 0 12px 12px 0;
+  color: white;
+  transition: all 0.3s ease;
+  padding: 0.75rem 1rem;
+}
+
+.magical-clear-btn:hover {
+  background: var(--gryffindor-red);
+  box-shadow: 0 0 10px rgba(116, 0, 1, 0.7);
+}
+
+.house-label {
+  color: var(--ink);
+  font-weight: 600;
+  font-size: 0.9rem;
+  font-family: 'Cinzel', serif;
+}
+
+.house-btn {
+  margin: 2px;
+  padding: 8px 15px;
+  border: 2px solid;
+  border-radius: 20px;
+  font-family: 'Cinzel', serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.house-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.house-btn:hover::before {
+  left: 100%;
+}
+
+.house-btn.active {
+  color: white !important;
+  box-shadow: var(--magic-shadow);
+}
+
+.house-btn[data-house="all"] {
+  background: rgba(64, 64, 64, 0.8);
+  border-color: #aaa;
+  color: #aaa;
+}
+
+.house-btn[data-house="all"].active {
+  background: #444;
+  border-color: white;
+  color: white;
+}
+
+.gryffindor-btn {
+  background: rgba(116, 0, 1, 0.2);
+  border-color: var(--gryffindor-red);
+  color: var(--gryffindor-red);
+}
+
+.gryffindor-btn.active {
+  background: var(--gryffindor-red);
+  border-color: var(--gryffindor-gold);
+  color: white;
+}
+
+.slytherin-btn {
+  background: rgba(26, 71, 42, 0.2);
+  border-color: var(--slytherin-green);
+  color: var(--slytherin-green);
+}
+
+.slytherin-btn.active {
+  background: var(--slytherin-green);
+  border-color: #aaa;
+  color: white;
+}
+
+.ravenclaw-btn {
+  background: rgba(14, 26, 64, 0.2);
+  border-color: var(--ravenclaw-blue);
+  color: var(--ravenclaw-blue);
+}
+
+.ravenclaw-btn.active {
+  background: var(--ravenclaw-blue);
+  border-color: var(--ravenclaw-bronze);
+  color: white;
+}
+
+.hufflepuff-btn {
+  background: rgba(255, 216, 0, 0.1);
+  border-color: var(--hufflepuff-yellow);
+  color: var(--hufflepuff-yellow);
+}
+
+.hufflepuff-btn.active {
+  background: var(--hufflepuff-yellow);
+  border-color: var(--hufflepuff-black);
+  color: var(--hufflepuff-black);
+}
+
+.section-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  background: linear-gradient(135deg, var(--gryffindor-gold) 0%, #f4d03f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+}
+
+.section-title::after {
+  content: "⚡";
+  position: absolute;
+  right: -45px;
+  top: 0;
+  font-size: 1.5rem;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: white;
+  animation: titleUnderline 3s infinite alternate;
+}
+
+@keyframes titleUnderline {
+  0% { width: 50px; }
+  100% { width: 100%; }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+}
+
+.stats-container {
+  margin-bottom: 1.5rem;
+}
+
+.text-magical {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-family: 'Cinzel', serif;
+}
+
+.stat-label {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.stat-number {
+  color: var(--gryffindor-gold);
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-shadow: 0 0 10px rgba(211, 166, 37, 0.3);
+}
+
+.stat-separator {
+  color: var(--gryffindor-gold);
+  margin: 0 10px;
+}
+
+.magical-counter {
+  display: inline-block;
+  min-width: 30px;
+  text-align: center;
+  position: relative;
+}
+
+.magical-counter::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--gryffindor-gold);
+  animation: counterGlow 2s infinite;
+}
+
+@keyframes counterGlow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.magical-loader {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  margin: 2rem auto;
+}
+
+.wand {
+  width: 4px;
+  height: 60px;
+  background: linear-gradient(to bottom, #8B7355, #D3A625, #8B7355);
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  animation: wandWave 2s infinite ease-in-out;
+}
+
+.sparkle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: var(--gryffindor-gold);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.s1 { top: 0; left: 50%; animation: sparkleFloat 2s infinite; }
+.s2 { top: 30px; right: 10px; animation: sparkleFloat 2s infinite 0.5s; }
+.s3 { bottom: 10px; left: 20px; animation: sparkleFloat 2s infinite 1s; }
+
+@keyframes wandWave {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  25% { transform: translateX(-50%) rotate(15deg); }
+  75% { transform: translateX(-50%) rotate(-15deg); }
+}
+
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.3; }
+  50% { transform: translateY(-20px) scale(1.5); opacity: 1; }
+}
+
+.loading-text {
+  font-family: 'Cinzel', serif;
+  font-size: 1.2rem;
+}
+
+.loading-word {
+  display: inline-block;
+  opacity: 0;
+  animation: wordAppear 0.5s forwards;
+}
+
+.loading-word:nth-child(1) { animation-delay: 0s; }
+.loading-word:nth-child(2) { animation-delay: 0.5s; }
+.loading-word:nth-child(3) { animation-delay: 1s; }
+.loading-word:nth-child(4) { animation-delay: 1.5s; }
+.loading-word:nth-child(5) { animation-delay: 2s; }
+.loading-word:nth-child(6) { animation-delay: 2.5s; }
+
+.loading-dots {
+  display: inline-block;
+  width: 20px;
+  text-align: left;
+  animation: dotsPulse 1.5s infinite;
+}
+
+@keyframes wordAppear {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes dotsPulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  color: #ffffff;
+  height: 100%;
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  position: relative;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, 
+    var(--gryffindor-gold), 
+    var(--ravenclaw-blue), 
+    var(--slytherin-green), 
+    var(--hufflepuff-yellow)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+    rgba(255, 215, 0, 0.1) 0%, 
+    transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card:hover {
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(211, 166, 37, 0.3);
+  border-color: var(--gryffindor-gold);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+.card-img-top {
+  height: 300px;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-bottom: 2px solid var(--glass-border);
+  position: relative;
+  z-index: 1;
+}
+
+.card:hover .card-img-top {
+  transform: scale(1.1);
+}
+
+.card-title {
+  font-family: 'Cinzel', serif;
+  color: var(--gryffindor-gold);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 2;
+}
+
+.card-body {
+  padding: 1.5rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+  position: relative;
+  z-index: 2;
+}
+
+.card-text {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.card-text strong {
+  color: var(--gryffindor-gold) !important;
+  font-weight: 600;
+}
+
+.house-badge {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.house-badge::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.house-badge:hover::after {
+  left: 100%;
+}
+
+.house-badge:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.gryffindor { 
+  background: linear-gradient(135deg, var(--gryffindor-red) 0%, #8b0000 100%); 
+  color: var(--gryffindor-gold); 
+  box-shadow: 0 4px 15px rgba(116, 0, 1, 0.4);
+}
+
+.slytherin { 
+  background: linear-gradient(135deg, var(--slytherin-green) 0%, #0d2818 100%); 
+  color: #ffffff; 
+  box-shadow: 0 4px 15px rgba(26, 71, 42, 0.4);
+}
+
+.ravenclaw { 
+  background: linear-gradient(135deg, var(--ravenclaw-blue) 0%, #050a1a 100%); 
+  color: var(--ravenclaw-bronze); 
+  box-shadow: 0 4px 15px rgba(14, 26, 64, 0.4);
+}
+
+.hufflepuff { 
+  background: linear-gradient(135deg, var(--hufflepuff-yellow) 0%, #ffed4e 100%); 
+  color: #000000; 
+  box-shadow: 0 4px 15px rgba(255, 219, 0, 0.4);
+}
+
+.unknown-house { 
+  background: linear-gradient(135deg, #5d5d5d 0%, #3a3a3a 100%); 
+  color: #ffffff; 
+}
+
+.magical-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.9) !important;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  border: 2px solid var(--glass-border);
+  margin: 2rem 0;
+}
+
+.state-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 2.5rem;
+  position: relative;
+}
+
+.state-icon::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: -5px;
+  right: -5px;
+  bottom: -5px;
+  border-radius: 50%;
+  z-index: -1;
+  animation: stateIconGlow 2s infinite;
+}
+
+.state-icon.error {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.state-icon.error::before {
+  border: 2px solid #ff6b6b;
+}
+
+.state-icon.empty {
+  color: var(--gryffindor-gold);
+  background: rgba(211, 166, 37, 0.1);
+}
+
+.state-icon.empty::before {
+  border: 2px solid var(--gryffindor-gold);
+}
+
+@keyframes stateIconGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.magical-btn {
+  background: linear-gradient(135deg, var(--gryffindor-gold) 0%, #f4d03f 100%);
+  border: none;
+  color: #000000;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-family: 'Cinzel', serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.magical-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.magical-btn:hover::before {
+  left: 100%;
+}
+
+.magical-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(211, 166, 37, 0.4);
+}
+
+.magical-pagination {
+  margin: 3rem 0;
+  padding: 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  border: 2px solid var(--glass-border);
+  color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.control-label {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-family: 'Cinzel', serif;
+  font-size: 0.9rem;
+}
+
+.custom-select {
+  position: relative;
+  display: inline-block;
+}
+
+.magical-select {
+  background: rgba(42, 54, 85, 0.8);
+  border: 2px solid var(--gryffindor-gold);
+  color: rgba(255, 255, 255, 0.95) !important;
+  padding: 0.5rem 2.5rem 0.5rem 1rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  appearance: none;
+  font-family: 'Cinzel', serif;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gryffindor-gold);
+  pointer-events: none;
+}
+
+.magical-select option {
+  background-color: rgba(26, 34, 56, 0.9) !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.magical-select:focus {
+  border-color: var(--gryffindor-gold);
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(211, 166, 37, 0.2);
+}
+
+.magical-pagination-list .page-item {
+  margin: 0 2px;
+}
+
+.magical-page-link {
+  background: rgba(42, 54, 85, 0.8);
+  border: 2px solid var(--gryffindor-gold);
+  color: var(--gryffindor-gold);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  min-width: 45px;
+  text-align: center;
+}
+
+.magical-page-link:hover {
+  background: var(--gryffindor-gold);
+  border-color: var(--gryffindor-gold);
+  color: var(--dark-bg);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(211, 166, 37, 0.3);
+}
+
+.page-item.active .magical-page-link {
+  background: linear-gradient(135deg, var(--gryffindor-gold) 0%, #f4d03f 100%);
+  border-color: var(--gryffindor-gold);
+  color: var(--dark-bg);
+  font-weight: 700;
+  box-shadow: 0 0 15px rgba(211, 166, 37, 0.5);
+}
+
+.page-item.disabled .magical-page-link {
+  background: rgba(42, 54, 85, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.4);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.pagination-info {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  font-family: 'Cinzel', serif;
+}
+
+.parchment-modal {
+  background: linear-gradient(to bottom, var(--parchment) 0%, var(--parchment-dark) 100%);
+  border: 2px solid var(--gryffindor-gold);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.parchment-modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('https://www.transparenttextures.com/patterns/paper.png');
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.parchment-header {
+  background: linear-gradient(to bottom, rgba(116, 0, 1, 0.2) 0%, transparent 100%);
+  border-bottom: 2px solid var(--gryffindor-gold);
+  padding: 1.5rem;
+}
+
+.parchment-body {
+  padding: 1.5rem;
+  color: var(--ink) !important;
+}
+
+.parchment-footer {
+  border-top: 2px solid var(--gryffindor-gold);
+  padding: 1.5rem;
+  background: linear-gradient(to top, rgba(116, 0, 1, 0.1) 0%, transparent 100%);
+}
+
+.modal-title {
+  color: var(--gryffindor-red) !important;
+  font-family: 'Cinzel', serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.btn-close-magical {
+  filter: invert(0.5) sepia(1) saturate(5) hue-rotate(0deg);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+  background-size: 0.8em;
+}
+
+.btn-close-magical:hover {
+  opacity: 1;
+  transform: rotate(90deg);
+}
+
+.spells-scroll-container {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.spells-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.spells-scroll-container::-webkit-scrollbar-track {
+  background: rgba(211, 166, 37, 0.1);
+  border-radius: 4px;
+}
+
+.spells-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--gryffindor-gold);
+  border-radius: 4px;
+}
+
+.spell-item {
+  padding: 1rem;
+  margin-bottom: 12px;
+  background: rgba(211, 166, 37, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border-left: 4px solid var(--gryffindor-gold);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.spell-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(211, 166, 37, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.spell-item:hover::before {
+  left: 100%;
+}
+
+.spell-item:hover {
+  background: rgba(211, 166, 37, 0.1);
+  transform: translateX(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.spell-name {
+  color: var(--gryffindor-red) !important;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.spell-description {
+  color: var(--ink) !important;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.house-spells-title,
+.all-spells-title {
+  color: var(--gryffindor-red) !important;
+  font-family: 'Cinzel', serif;
+  margin-top: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--gryffindor-gold) !important;
+  font-size: 1.5rem;
+  font-weight: 700;
+  position: relative;
+}
+
+.all-spells-title::after {
+  content: "✨";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: sparkle 2s infinite;
+}
+
+.magical-footer {
+  background: linear-gradient(to bottom, rgba(10, 14, 26, 0.95) 0%, rgba(7, 11, 23, 0.95) 100%);
+  backdrop-filter: blur(20px);
+  padding: 2.5rem;
+  margin-top: 4rem;
+  border-top: 2px solid var(--gryffindor-gold);
+  color: rgba(255, 255, 255, 0.9) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.magical-footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(116, 0, 1, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(14, 26, 64, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.footer-sparkle {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--gryffindor-gold);
+  border-radius: 50%;
+  margin: 0 10px;
+  animation: footerSparkle 2s infinite;
+}
+
+@keyframes footerSparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.magical-link {
+  color: var(--gryffindor-gold) !important;
+  font-weight: 700;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.magical-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gryffindor-gold);
+  transition: width 0.3s ease;
+}
+
+.magical-link:hover {
+  text-shadow: 0 0 10px rgba(211, 166, 37, 0.5);
+}
+
+.magical-link:hover::after {
+  width: 100%;
+}
+
+.text-magical {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-family: 'Cinzel', serif;
+}
+
+.magic-icon {
+  color: var(--gryffindor-gold);
+  animation: magicSpin 4s linear infinite;
+}
+
+@keyframes magicSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@media (max-width: 768px) {
+  .title-text {
+    font-size: 2.5rem;
+  }
+  
+  .title-main {
+    font-size: 2rem;
+  }
+  
+  .title-sub {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+  }
+  
+  .pagination-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .cards-per-page-control {
+    justify-content: center;
+  }
+
+  .controls-container {
+    padding: 1.5rem;
+  }
+
+  .magical-header {
+    padding: 2rem 0;
+  }
+  
+  .house-label {
+    display: none;
+  }
+  
+  .house-btn {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+  
+  .magic-wand-line {
+    display: none;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}

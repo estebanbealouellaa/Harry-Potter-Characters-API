@@ -1,0 +1,898 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wizarding World Gallery</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <link rel="stylesheet" href="style.css">
+
+<body>
+  <div id="magic-sparkles"></div>
+
+  <div class="modal fade" id="spellsModal" tabindex="-1" aria-labelledby="spellsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content parchment-modal">
+        <div class="modal-header parchment-header">
+          <h5 class="modal-title" id="spellsModalLabel">
+            <i class="fas fa-magic me-2"></i>
+            <span>Wizarding Spells</span>
+          </h5>
+          <button type="button" class="btn-close btn-close-magical" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body parchment-body">
+          <div id="characterSpellsInfo">
+          </div>
+
+          <div id="allSpellsSection" style="display: none;">
+            <h6 class="all-spells-title"><i class="fas fa-scroll me-2"></i>All Spells</h6>
+            <div class="input-group mb-3">
+              <span class="input-group-text magical-input-group">
+                <i class="fas fa-search"></i>
+              </span>
+              <input type="text" id="spellSearch" class="form-control magical-input"
+                placeholder="Search spells by name...">
+              <button class="btn magical-clear-btn" id="clearSpellSearch" title="Clear search">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div id="allSpellsList" class="spells-scroll-container">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer parchment-footer">
+          <button type="button" class="btn magical-btn" data-bs-dismiss="modal">
+            <i class="fas fa-times me-2"></i>Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <header class="magical-header">
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <div class="text-center p-4 position-relative">
+            <div class="magic-wand-line"></div>
+            <div class="magic-wand-line reverse"></div>
+            <h1 class="title-text animate__animated animate__fadeInDown">
+              <span class="title-main">Wizarding World Gallery</span>
+              <span class="title-sub">A Collection of Magical Beings</span>
+            </h1>
+            <div class="header-sparkle sparkle-1"></div>
+            <div class="header-sparkle sparkle-2"></div>
+            <div class="header-sparkle sparkle-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <div class="container mt-5">
+      <div class="controls-container parchment-controls">
+        <div class="row align-items-center">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <div class="input-group">
+              <span class="input-group-text magical-input-group">
+                <i class="fas fa-search"></i>
+              </span>
+              <input type="text" id="searchInput" class="form-control magical-input"
+                placeholder="Search characters by name, house, or actor...">
+              <button class="btn magical-clear-btn" id="clearSearch" title="Clear search">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex flex-wrap justify-content-md-end house-filter">
+              <div class="house-label me-2 d-none d-md-block">
+                <i class="fas fa-hat-wizard me-1"></i>Filter by House:
+              </div>
+              <button class="btn house-btn active" data-house="all">All Houses</button>
+              <button class="btn house-btn gryffindor-btn" data-house="Gryffindor">
+                <i class="fas fa-lion me-1"></i>Gryffindor
+              </button>
+              <button class="btn house-btn slytherin-btn" data-house="Slytherin">
+                <i class="fas fa-serpent me-1"></i>Slytherin
+              </button>
+              <button class="btn house-btn ravenclaw-btn" data-house="Ravenclaw">
+                <i class="fas fa-eagle me-1"></i>Ravenclaw
+              </button>
+              <button class="btn house-btn hufflepuff-btn" data-house="Hufflepuff">
+                <i class="fas fa-badger me-1"></i>Hufflepuff
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col">
+          <h2 class="section-title">
+            <i class="fas fa-users magic-icon me-2"></i>
+            Magical Characters
+          </h2>
+          <div class="stats-container">
+            <p class="text-magical">
+              <span class="stat-label">Showing</span>
+              <span id="characterCount" class="stat-number magical-counter">0</span>
+              <span class="stat-label">of</span>
+              <span id="totalCharacters" class="stat-number magical-counter">0</span>
+              <span class="stat-label">characters</span>
+              <span class="stat-separator">|</span>
+              <span class="stat-label">Page</span>
+              <span id="currentPage" class="stat-number magical-counter">1</span>
+              <span class="stat-label">of</span>
+              <span id="totalPages" class="stat-number magical-counter">1</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div id="loadingState" class="text-center">
+        <div class="magical-loader">
+          <div class="wand"></div>
+          <div class="sparkle s1"></div>
+          <div class="sparkle s2"></div>
+          <div class="sparkle s3"></div>
+        </div>
+        <p class="mt-3 loading-text">
+          <span class="loading-word">Summoning</span>
+          <span class="loading-word">characters</span>
+          <span class="loading-word">from</span>
+          <span class="loading-word">the</span>
+          <span class="loading-word">wizarding</span>
+          <span class="loading-word">world</span>
+          <span class="loading-dots">...</span>
+        </p>
+      </div>
+
+      <div id="errorState" class="empty-state magical-state" style="display: none;">
+        <div class="state-icon error">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h4>Something went wrong!</h4>
+        <p>The owls must be delayed or a charm has backfired.</p>
+        <button id="retryButton" class="btn magical-btn mt-2">
+          <i class="fas fa-redo me-2"></i>Retry Spell
+        </button>
+      </div>
+
+      <div id="emptyState" class="empty-state magical-state" style="display: none;">
+        <div class="state-icon empty">
+          <i class="fas fa-search"></i>
+        </div>
+        <h4>No characters found</h4>
+        <p>Try adjusting your search or filter to find magical beings.</p>
+        <button class="btn magical-btn mt-2" id="resetFilters">
+          <i class="fas fa-undo me-2"></i>Reset All Filters
+        </button>
+      </div>
+
+      <div class="row" id="container-row"></div>
+
+      <div id="paginationControls" class="pagination-container magical-pagination" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+          <div class="cards-per-page-control">
+            <span class="control-label">Show:</span>
+            <div class="custom-select">
+              <select id="cardsPerPage" class="magical-select">
+                <option value="10" selected>10 cards</option>
+                <option value="20">20 cards</option>
+                <option value="30">30 cards</option>
+                <option value="50">50 cards</option>
+              </select>
+              <div class="select-arrow">
+                <i class="fas fa-chevron-down"></i>
+              </div>
+            </div>
+            <span class="control-label">per page</span>
+          </div>
+
+          <nav aria-label="Character pagination">
+            <ul class="pagination justify-content-center mb-0 magical-pagination-list">
+              <li class="page-item" id="prevPage">
+                <a class="page-link magical-page-link" href="#" aria-label="Previous">
+                  <i class="fas fa-chevron-left"></i>
+                </a>
+              </li>
+              <li class="page-item" id="nextPage">
+                <a class="page-link magical-page-link" href="#" aria-label="Next">
+                  <i class="fas fa-chevron-right"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <div class="pagination-info">
+            <span class="info-text">Magical navigation</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="magical-footer">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-8 text-center text-md-start">
+            <p class="mb-1">
+              <span class="footer-sparkle"></span>
+              ⚡ Powered by
+              <a href="https://hp-api.onrender.com/" target="_blank" class="magical-link">
+                hp-api.onrender.com
+              </a>
+              ⚡
+              <span class="footer-sparkle"></span>
+            </p>
+          </div>
+          <div class="col-md-4 text-center text-md-end mt-2 mt-md-0">
+            <p class="text-magical small">
+              <i class="fas fa-hat-wizard me-1"></i>
+              Characters from the Harry Potter universe
+              <i class="fas fa-broom ms-1"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const containerRow = document.getElementById("container-row");
+    const loadingState = document.getElementById("loadingState");
+    const errorState = document.getElementById("errorState");
+    const emptyState = document.getElementById("emptyState");
+    const searchInput = document.getElementById("searchInput");
+    const characterCount = document.getElementById("characterCount");
+    const totalCharacters = document.getElementById("totalCharacters");
+    const currentPage = document.getElementById("currentPage");
+    const totalPages = document.getElementById("totalPages");
+    const retryButton = document.getElementById("retryButton");
+    const houseFilterButtons = document.querySelectorAll('.house-filter .btn');
+    const paginationControls = document.getElementById("paginationControls");
+    const cardsPerPageSelect = document.getElementById("cardsPerPage");
+    const prevPageBtn = document.getElementById("prevPage");
+    const nextPageBtn = document.getElementById("nextPage");
+    const spellsModal = new bootstrap.Modal(document.getElementById('spellsModal'));
+    const spellSearchInput = document.getElementById("spellSearch");
+    const clearSearchBtn = document.getElementById("clearSearch");
+    const clearSpellSearchBtn = document.getElementById("clearSpellSearch");
+    const resetFiltersBtn = document.getElementById("resetFilters");
+
+    let allCharacters = [];
+    let filteredCharacters = [];
+    let currentPageNumber = 1;
+    let cardsPerPage = 10;
+    let allSpells = [];
+    let currentCharacter = null;
+
+    const houseSpells = {
+      'Gryffindor': ['Expelliarmus', 'Expecto patronum', 'Protego', 'Stupefy', 'Lumos'],
+      'Slytherin': ['Sectumsempra', 'Serpensortia', 'Avada Kedavra', 'Crucio', 'Imperio'],
+      'Ravenclaw': ['Wingardium Leviosa', 'Reparo', 'Oculus Reparo', 'Alohomora', 'Lumos'],
+      'Hufflepuff': ['Herbivicus', 'Episkey', 'Brackium Emendo', 'Ferula', 'Renneverate']
+    };
+
+    const spellDescriptions = {
+      'Expelliarmus': 'Forces an opponent to drop whatever\'s in their possession',
+      'Expecto patronum': 'The Patronus Charm is a powerful projection of hope and happiness that drives away Dementors',
+      'Protego': 'Casts an invisible shield around the caster, protecting against spells and objects',
+      'Stupefy': 'Stuns the target, rendering them unconscious',
+      'Lumos': 'Illuminates the caster\'s wand',
+      'Sectumsempra': 'Inflicts severe lacerations and haemorrhaging on the target',
+      'Serpensortia': 'Conjures a live snake',
+      'Avada Kedavra': 'Also known as The Killing Curse, the most evil spell in the Wizarding World',
+      'Crucio': 'One of three Unforgivable Curses, it causes unbearable pain in the target',
+      'Imperio': 'One of the three Unforgivable Curses, it places the target under the complete control of the caster',
+      'Wingardium Leviosa': 'Makes objects fly, or levitate',
+      'Reparo': 'Fixes broken objects',
+      'Oculus Reparo': 'Repairs eyeglasses',
+      'Alohomora': 'Unlocks objects',
+      'Herbivicus': 'Causes plants to grow rapidly',
+      'Episkey': 'Heals minor injuries',
+      'Brackium Emendo': 'Heals broken bones',
+      'Ferula': 'A healing charm that conjures wraps and bandages for wounds',
+      'Renneverate': 'Awakens or revives the target'
+    };
+
+    function createSparkle(x, y) {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'magic-sparkle';
+      sparkle.style.left = `${x}px`;
+      sparkle.style.top = `${y}px`;
+      document.body.appendChild(sparkle);
+
+      const size = Math.random() * 6 + 3;
+      sparkle.style.width = `${size}px`;
+      sparkle.style.height = `${size}px`;
+
+      setTimeout(() => sparkle.remove(), 2000);
+    }
+
+    function createSpellEffect(x, y) {
+      const spell = document.createElement('div');
+      spell.className = 'spell-cast';
+      spell.style.setProperty('--spell-x', `${x}px`);
+      spell.style.setProperty('--spell-y', `${y}px`);
+      document.body.appendChild(spell);
+
+      setTimeout(() => spell.remove(), 500);
+    }
+
+    function createFloatingHat() {
+      const hat = document.createElement('div');
+      hat.className = 'floating-hat';
+      hat.innerHTML = '<i class="fas fa-hat-wizard"></i>';
+      hat.style.left = `${Math.random() * 100}vw`;
+      hat.style.top = `${Math.random() * 100}vh`;
+      document.body.appendChild(hat);
+
+      setTimeout(() => hat.remove(), 20000);
+    }
+
+    function playSpellSound() {
+      const sound = document.getElementById('spellSound');
+      if (sound) {
+        sound.currentTime = 0;
+        sound.play().catch(e => console.log("Audio play failed:", e));
+      }
+    }
+
+    function playHoverSound() {
+      const sound = document.getElementById('hoverSound');
+      if (sound) {
+        sound.currentTime = 0;
+        sound.volume = 0.3;
+        sound.play().catch(e => console.log("Audio play failed:", e));
+      }
+    }
+
+    function initMagicalEffects() {
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => createFloatingHat(), i * 5000);
+      }
+
+      for (let i = 0; i < 15; i++) {
+        setTimeout(() => {
+          const x = Math.random() * window.innerWidth;
+          const y = Math.random() * window.innerHeight;
+          createSparkle(x, y);
+        }, i * 300);
+      }
+
+      let sparkleTimer;
+      document.addEventListener('mousemove', (e) => {
+        if (sparkleTimer) clearTimeout(sparkleTimer);
+
+        sparkleTimer = setTimeout(() => {
+          if (Math.random() > 0.8) {
+            createSparkle(e.clientX, e.clientY);
+          }
+        }, 50);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      fetchCharacters();
+      fetchSpells();
+      setupEventListeners();
+      initMagicalEffects();
+    });
+
+    function setupEventListeners() {
+      searchInput.addEventListener('input', function () {
+        currentPageNumber = 1;
+        filterCharacters();
+        if (Math.random() > 0.7) playHoverSound();
+      });
+
+      retryButton.addEventListener('click', () => {
+        playSpellSound();
+        fetchCharacters();
+      });
+
+      houseFilterButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          houseFilterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          currentPageNumber = 1;
+          filterCharacters();
+          playSpellSound();
+        });
+      });
+
+      cardsPerPageSelect.addEventListener('change', function () {
+        cardsPerPage = parseInt(this.value);
+        currentPageNumber = 1;
+        updatePagination();
+        displayCharacters();
+        playHoverSound();
+      });
+
+      prevPageBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (currentPageNumber > 1) {
+          currentPageNumber--;
+          updatePagination();
+          displayCharacters();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          playHoverSound();
+        }
+      });
+
+      nextPageBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const totalPagesCount = Math.ceil(filteredCharacters.length / cardsPerPage);
+        if (currentPageNumber < totalPagesCount) {
+          currentPageNumber++;
+          updatePagination();
+          displayCharacters();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          playHoverSound();
+        }
+      });
+
+      spellSearchInput.addEventListener('input', function () {
+        filterSpells(this.value);
+        if (Math.random() > 0.8) playHoverSound();
+      });
+
+      clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        currentPageNumber = 1;
+        filterCharacters();
+        playSpellSound();
+      });
+
+      clearSpellSearchBtn.addEventListener('click', () => {
+        spellSearchInput.value = '';
+        filterSpells('');
+        playSpellSound();
+      });
+
+      resetFiltersBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        houseFilterButtons.forEach(btn => {
+          btn.classList.remove('active');
+          if (btn.dataset.house === 'all') {
+            btn.classList.add('active');
+          }
+        });
+        currentPageNumber = 1;
+        filterCharacters();
+        playSpellSound();
+      });
+
+      document.addEventListener('mouseover', function (e) {
+        const card = e.target.closest('.card');
+        if (card) {
+          if (Math.random() > 0.9) {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+          }
+
+          if (Math.random() > 0.8) {
+            playHoverSound();
+          }
+        }
+      });
+
+      document.addEventListener('click', function (e) {
+        if (e.target.closest('.card')) {
+          createSpellEffect(e.clientX, e.clientY);
+          playSpellSound();
+        }
+      });
+    }
+
+    function fetchCharacters() {
+      loadingState.style.display = 'block';
+      errorState.style.display = 'none';
+      emptyState.style.display = 'none';
+      paginationControls.style.display = 'none';
+      containerRow.innerHTML = '';
+
+      fetch("https://hp-api.onrender.com/api/characters")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          allCharacters = data;
+          filteredCharacters = [...allCharacters];
+          totalCharacters.textContent = allCharacters.length;
+          loadingState.style.display = 'none';
+          filterCharacters();
+
+          createSpellEffect(window.innerWidth / 2, window.innerHeight / 2);
+        })
+        .catch(error => {
+          console.error('Error fetching characters:', error);
+          loadingState.style.display = 'none';
+          errorState.style.display = 'block';
+        });
+    }
+
+    function fetchSpells() {
+      fetch("https://hp-api.onrender.com/api/spells")
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          allSpells = data;
+          console.log(`Loaded ${allSpells.length} spells from API`);
+        })
+        .catch(error => {
+          console.error('Error fetching spells:', error);
+          allSpells = getFallbackSpells();
+        });
+    }
+
+    function getFallbackSpells() {
+      return [
+        { name: "Aberto", description: "Opens locked doors" },
+        { name: "Accio", description: "Summons objects" },
+        { name: "Aguamenti", description: "Summons water" },
+        { name: "Alohomora", description: "Unlocks objects" },
+        { name: "Anapneo", description: "Clears someone's airway" },
+        { name: "Avada Kedavra", description: "Also known as The Killing Curse, the most evil spell in the Wizarding World" },
+        { name: "Confundo", description: "Known as the Confundus Charm, it causes confusion of the target" },
+        { name: "Crucio", description: "One of three Unforgivable Curses, it causes unbearable pain in the target" },
+        { name: "Diffindo", description: "Used to precisely cut an object" },
+        { name: "Engorgio", description: "Causes rapid growth in the targeted object" },
+        { name: "Expecto patronum", description: "The Patronus Charm is a powerful projection of hope and happiness that drives away Dementors" },
+        { name: "Expelliarmus", description: "Forces an opponent to drop whatever's in their possession" },
+        { name: "Imperio", description: "One of the three Unforgivable Curses, it places the target under the complete control of the caster" },
+        { name: "Lumos", description: "Illuminates the caster's wand" },
+        { name: "Nox", description: "Reverses the lumos charm, extinguishing a wand's light" },
+        { name: "Obliviate", description: "Erases the target's memory" },
+        { name: "Petrificus Totalus", description: "Temporarily freezes or petrifies the body of the target" },
+        { name: "Protego", description: "Casts an invisible shield around the caster, protecting against spells and objects" },
+        { name: "Reducto", description: "Reduces the target to pieces" },
+        { name: "Reparo", description: "Fixes broken objects" },
+        { name: "Rictusempra", description: "A charm that disarms an opponent by tickling them" },
+        { name: "Riddikulus", description: "Used to defeat a Boggart, the charm allows the scary creature to assume a comedic form, disarming it" },
+        { name: "Sectumsempra", description: "Inflicts severe lacerations and haemorrhaging on the target" },
+        { name: "Serpensortia", description: "Conjures a live snake" },
+        { name: "Stupefy", description: "Stuns the target, rendering them unconscious" },
+        { name: "Wingardium Leviosa", description: "Makes objects fly, or levitate" }
+      ];
+    }
+
+    function filterCharacters() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const activeHouseButton = document.querySelector('.house-filter .btn.active');
+      const selectedHouse = activeHouseButton ? activeHouseButton.dataset.house : 'all';
+
+      filteredCharacters = allCharacters.filter(character => {
+        const houseMatch = selectedHouse === 'all' || character.house === selectedHouse;
+
+        const searchMatch = !searchTerm ||
+          (character.name && character.name.toLowerCase().includes(searchTerm)) ||
+          (character.house && character.house.toLowerCase().includes(searchTerm)) ||
+          (character.actor && character.actor.toLowerCase().includes(searchTerm));
+
+        return houseMatch && searchMatch;
+      });
+
+      updatePagination();
+      displayCharacters();
+    }
+
+    function updatePagination() {
+      const totalCharactersCount = filteredCharacters.length;
+      const totalPagesCount = Math.ceil(totalCharactersCount / cardsPerPage);
+
+      characterCount.textContent = totalCharactersCount;
+      totalPages.textContent = totalPagesCount;
+      currentPage.textContent = currentPageNumber;
+
+      if (totalCharactersCount > cardsPerPage) {
+        paginationControls.style.display = 'block';
+      } else {
+        paginationControls.style.display = 'none';
+      }
+
+      prevPageBtn.classList.toggle('disabled', currentPageNumber === 1);
+      nextPageBtn.classList.toggle('disabled', currentPageNumber === totalPagesCount);
+
+      updatePageNumbers(totalPagesCount);
+    }
+
+    function updatePageNumbers(totalPagesCount) {
+      const paginationList = document.querySelector('.pagination');
+      const pageItems = paginationList.querySelectorAll('.page-number');
+      pageItems.forEach(item => item.remove());
+
+      let startPage = Math.max(1, currentPageNumber - 2);
+      let endPage = Math.min(totalPagesCount, currentPageNumber + 2);
+
+      if (currentPageNumber <= 3) {
+        endPage = Math.min(5, totalPagesCount);
+      }
+
+      if (currentPageNumber >= totalPagesCount - 2) {
+        startPage = Math.max(1, totalPagesCount - 4);
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        const pageItem = document.createElement('li');
+        pageItem.className = `page-item page-number ${i === currentPageNumber ? 'active' : ''}`;
+        pageItem.innerHTML = `<a class="page-link magical-page-link" href="#">${i}</a>`;
+
+        pageItem.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (i !== currentPageNumber) {
+            currentPageNumber = i;
+            updatePagination();
+            displayCharacters();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            playHoverSound();
+          }
+        });
+
+        nextPageBtn.parentNode.insertBefore(pageItem, nextPageBtn);
+      }
+
+      if (startPage > 1) {
+        const firstPageItem = document.createElement('li');
+        firstPageItem.className = 'page-item page-number';
+        firstPageItem.innerHTML = '<a class="page-link magical-page-link" href="#">1</a>';
+
+        firstPageItem.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentPageNumber = 1;
+          updatePagination();
+          displayCharacters();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          playHoverSound();
+        });
+
+        const ellipsisItem = document.createElement('li');
+        ellipsisItem.className = 'page-item disabled';
+        ellipsisItem.innerHTML = '<span class="page-link magical-page-link">...</span>';
+
+        prevPageBtn.parentNode.insertBefore(firstPageItem, prevPageBtn.nextSibling);
+        prevPageBtn.parentNode.insertBefore(ellipsisItem, firstPageItem.nextSibling);
+      }
+
+      if (endPage < totalPagesCount) {
+        const lastPageItem = document.createElement('li');
+        lastPageItem.className = 'page-item page-number';
+        lastPageItem.innerHTML = `<a class="page-link magical-page-link" href="#">${totalPagesCount}</a>`;
+
+        lastPageItem.addEventListener('click', (e) => {
+          e.preventDefault();
+          currentPageNumber = totalPagesCount;
+          updatePagination();
+          displayCharacters();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          playHoverSound();
+        });
+
+        const ellipsisItem = document.createElement('li');
+        ellipsisItem.className = 'page-item disabled';
+        ellipsisItem.innerHTML = '<span class="page-link magical-page-link">...</span>';
+
+        nextPageBtn.parentNode.insertBefore(ellipsisItem, nextPageBtn);
+        nextPageBtn.parentNode.insertBefore(lastPageItem, ellipsisItem);
+      }
+    }
+
+    function displayCharacters() {
+      containerRow.innerHTML = '';
+
+      if (filteredCharacters.length === 0) {
+        emptyState.style.display = 'block';
+        paginationControls.style.display = 'none';
+        return;
+      }
+
+      emptyState.style.display = 'none';
+
+      const startIndex = (currentPageNumber - 1) * cardsPerPage;
+      const endIndex = Math.min(startIndex + cardsPerPage, filteredCharacters.length);
+      const pageCharacters = filteredCharacters.slice(startIndex, endIndex);
+
+      pageCharacters.forEach((character, index) => {
+        const houseClass = getHouseClass(character.house);
+        const houseBadge = character.house ?
+          `<span class="house-badge ${houseClass}">${character.house}</span>` :
+          '<span class="house-badge unknown-house">Unknown House</span>';
+
+        const characterImage = character.image && character.image.trim() !== '' ?
+          character.image :
+          `https://ui-avatars.com/api/?name=${encodeURIComponent(character.name || 'Unknown')}&background=1c2541&color=fff&size=300&bold=true&font-size=0.5`;
+
+        const card = document.createElement('div');
+        card.className = 'col-12 col-md-6 col-lg-4 col-xl-3 mb-4';
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.innerHTML = `
+          <div class="card h-100" data-character-id="${character.name}">
+            <img src="${characterImage}" 
+                 class="card-img-top" 
+                 alt="${character.name || 'Unknown character'}"
+                 onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(character.name || 'Unknown')}&background=1c2541&color=fff&size=300&bold=true&font-size=0.5'">
+            <div class="card-body d-flex flex-column">
+              ${houseBadge}
+              <h5 class="card-title">
+                <i class="fas ${character.wizard ? 'fa-hat-wizard' : 'fa-user'} me-2"></i> 
+                ${character.name || 'Unknown'}
+              </h5>
+              <p class="card-text flex-grow-1">
+                <strong><i class="fas fa-theater-masks me-1"></i> Actor:</strong> ${character.actor || 'Unknown'} <br>
+                <strong><i class="fas fa-heartbeat me-1"></i> Status:</strong> 
+                <span class="${character.alive ? 'text-success' : 'text-danger'}">
+                  ${character.alive ? 'Alive' : 'Deceased'}
+                </span> <br>
+                ${character.dateOfBirth ? `<strong><i class="fas fa-birthday-cake me-1"></i> Born:</strong> ${character.dateOfBirth} <br>` : ''}
+                ${character.patronus ? `<strong><i class="fas fa-horse me-1"></i> Patronus:</strong> ${character.patronus} <br>` : ''}
+                ${character.ancestry ? `<strong><i class="fas fa-family me-1"></i> Ancestry:</strong> ${character.ancestry}` : ''}
+              </p>
+              <div class="mt-auto pt-2">
+                <small class="text-muted">
+                  <i class="fas ${character.gender === 'male' ? 'fa-mars' : 'fa-venus'} me-1"></i>
+                  ${character.gender || 'Unknown'} • 
+                  ${character.species || 'Human'}
+                </small>
+                <div class="mt-2">
+                  <small class="text-warning" style="font-weight: 600;">
+                    <i class="fas fa-magic me-1"></i> Click to see spells
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const cardElement = card.querySelector('.card');
+        cardElement.addEventListener('click', () => {
+          currentCharacter = character;
+          showSpellsModal(character);
+        });
+
+        containerRow.appendChild(card);
+      });
+    }
+
+    function showSpellsModal(character) {
+      const modalTitle = document.getElementById('spellsModalLabel');
+      const characterSpellsInfo = document.getElementById('characterSpellsInfo');
+      const allSpellsSection = document.getElementById('allSpellsSection');
+      const allSpellsList = document.getElementById('allSpellsList');
+
+      modalTitle.textContent = `Spells for ${character.name}`;
+
+      const houseClass = getHouseClass(character.house);
+      const characterHouse = character.house || 'Unknown';
+
+      let houseSpellsHTML = '';
+      if (character.house && houseSpells[character.house]) {
+        houseSpellsHTML = `
+          <h6 class="house-spells-title">${character.house} House Spells</h6>
+          <div class="mb-4">
+            ${houseSpells[character.house].map(spell => {
+          const description = spellDescriptions[spell] || 'A powerful magical incantation';
+          return `
+                <div class="spell-item">
+                  <div class="spell-name">${spell}</div>
+                  <div class="spell-description">${description}</div>
+                </div>
+              `;
+        }).join('')}
+          </div>
+        `;
+      } else if (character.house) {
+        houseSpellsHTML = `
+          <h6 class="house-spells-title">${character.house} House Spells</h6>
+          <p>No specific house spells found for ${character.house}. Here are some common spells:</p>
+          <div class="mb-4">
+            ${['Lumos', 'Wingardium Leviosa', 'Expelliarmus', 'Alohomora'].map(spell => {
+          const description = spellDescriptions[spell] || 'A powerful magical incantation';
+          return `
+                <div class="spell-item">
+                  <div class="spell-name">${spell}</div>
+                  <div class="spell-description">${description}</div>
+                </div>
+              `;
+        }).join('')}
+          </div>
+        `;
+      } else {
+        houseSpellsHTML = `
+          <h6 class="house-spells-title">Common Wizarding Spells</h6>
+          <p>This character doesn't belong to a known house. Here are some common spells:</p>
+          <div class="mb-4">
+            ${['Lumos', 'Wingardium Leviosa', 'Expelliarmus', 'Alohomora'].map(spell => {
+          const description = spellDescriptions[spell] || 'A powerful magical incantation';
+          return `
+                <div class="spell-item">
+                  <div class="spell-name">${spell}</div>
+                  <div class="spell-description">${description}</div>
+                </div>
+              `;
+        }).join('')}
+          </div>
+        `;
+      }
+
+      characterSpellsInfo.innerHTML = `
+        <div class="d-flex align-items-center mb-3">
+          <div class="house-badge ${houseClass} me-3">${characterHouse}</div>
+          <div>
+            <strong>${character.name}</strong> ${character.actor ? `• ${character.actor}` : ''}
+          </div>
+        </div>
+        ${houseSpellsHTML}
+      `;
+
+      allSpellsSection.style.display = 'block';
+      spellSearchInput.value = '';
+      displayAllSpells();
+
+      spellsModal.show();
+      playSpellSound();
+    }
+
+    function displayAllSpells(searchTerm = '') {
+      const allSpellsList = document.getElementById('allSpellsList');
+
+      let filteredSpells = allSpells;
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filteredSpells = allSpells.filter(spell =>
+          spell.name.toLowerCase().includes(term) ||
+          (spell.description && spell.description.toLowerCase().includes(term))
+        );
+      }
+
+      if (filteredSpells.length === 0) {
+        allSpellsList.innerHTML = '<p class="text-center text-muted">No spells found matching your search.</p>';
+        return;
+      }
+
+      allSpellsList.innerHTML = filteredSpells.map(spell => `
+        <div class="spell-item">
+          <div class="spell-name">${spell.name}</div>
+          <div class="spell-description">${spell.description || 'A powerful magical incantation'}</div>
+        </div>
+      `).join('');
+    }
+
+    function filterSpells(searchTerm) {
+      displayAllSpells(searchTerm);
+    }
+
+    function getHouseClass(house) {
+      if (!house) return 'unknown-house';
+
+      switch (house.toLowerCase()) {
+        case 'gryffindor': return 'gryffindor';
+        case 'slytherin': return 'slytherin';
+        case 'ravenclaw': return 'ravenclaw';
+        case 'hufflepuff': return 'hufflepuff';
+        default: return 'unknown-house';
+      }
+    }
+  </script>
+</body>
+
+</html>
